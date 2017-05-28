@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>title</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style type="text/css">
+      hr{
+        border-width: 4%;
+        border-color: #C0C0C0;
+        margin-top: 5%;
+        margin-bottom: 5%;
+      }
+      fieldset.scheduler-border {
+        border: 1px groove #ddd !important;
+        padding: 0 1.4em 1.4em 1.4em !important;
+        margin: 0 0 1.5em 0 !important;
+        -webkit-box-shadow:  0px 0px 0px 0px #000;
+                box-shadow:  0px 0px 0px 0px #000;
+      }
+      legend.scheduler-border {
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        text-align: left !important;
+        width:auto;
+        padding:0 10px;
+        border-bottom:none;
+      }
+    </style>
+     <!-- AngularJS Dependency -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
+    <script src="../scripts/socket.js"></script>
+  </head>
+  <body ng-app="DCRApp" ng-controller="DCRForm">
+    <!--navbar-->
+    <nav class="navbar navbar-default">
+      <div style="padding-top:1%">
+        <span class="glyphicon glyphicon-home"></span><a class="navbar-brand" href=""><!--company name--></a>
+      </div> 
+    </nav>
+    <!-- body container-->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-sm-12 col-md-offset-3">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <form data-toggle="validator"
+              method="" action="">
+                <fieldset class="scheduler-border">
+                  <legend class="scheduler-border">Insert New Connection</legend>
+                  <!-- field 1-->
+                  <div class="form-group has-feedback">
+                    <input type="text" tabindex="1" pattern="^[0-9]{1,}$" class="form-control" placeholder="Connection Id" name="connId" ng-model="connId" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <!--field 2-->
+                  <div class="form-group has-feedback">
+                    <input type="text" tabindex="1" pattern="^[0-9]{1,}$" class="form-control" placeholder="Timeout" name="timeout" ng-model="timeout" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <!--submit-->
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-md-4 col-md-offset-4">
+                        <button class="form-control btn btn-primary" value="Submit" ng-click="request()">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                  <!--div for error msg-->
+                  <div><!--the error message--></div>
+                </fieldset>
+              </form>
+              <form method="GET" action="/serverStatus">
+                <fieldset class="scheduler-border">
+                  <legend class="scheduler-border">Get All Concurrent Connections</legend>
+                  <!--button-->
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-md-4 col-md-offset-4">
+                        <input type="submit" class="form-control btn btn-primary" value="Get All Current Connections">
+                      </div>
+                    </div>
+                  </div>
+                  <!--div for error msg-->
+                  <div><!--the error message--></div>
+                </fieldset>
+              </form>
+              <form data-toggle="validator" method="POST" action="/kill">
+                <fieldset class="scheduler-border">
+                  <legend class="scheduler-border">Delete a connection</legend>
+                  <!--field 3-->
+                  <div class="form-group has-feedback">
+                    <input type="text" tabindex="1" pattern="^[0-9]{1,}$" class="form-control" placeholder="Connection Id" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <!--submit-->
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-md-4 col-md-offset-4">
+                        <input type="submit" class="form-control btn btn-primary" value="Delete Connection Id">
+                      </div>
+                    </div>
+                  </div>
+                  <!--div for error msg-->
+                  <div><!--the error message--></div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
+  </body>
+</html>
