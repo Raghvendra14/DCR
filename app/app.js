@@ -21,24 +21,51 @@ app.all('/', function (req, res, next) {
 
 io.on('connection', function(socket) {
 	console.log('Client Connected', socket.id)
-
 	socket.on('request', function(data) {
-		var promise = new Promise(function (resolve, reject) { 
-			setTimeout(function() {
-				resolve('Success')
-			}, data.timeout)	
+		var timeSpent = 0;
+		var timeInterval = (data.timeout < 1000) ? data.timeout : 1000;
+		console.log('Got Data')
+		clients.push({
+			connId: data.connId,
+			timeout: data.timeout,
+			timeSpent: 0
+		})
+		console.log(clients)
+		var promise = new Promise(function (resolve, reject) {
+			var interval = setInterval(function() {
+				console.log('Time Interval:', timeInterval)
+				timeSpent += timeInterval;
+				for (const obj of clients) {
+					if (obj.connId === data.connId) {
+						if (obj.timeout !== timeSpent.toString()) {
+							obj.timeSpent = timeSpent
+							console.log('Updated timeSpent:', obj)
+						} else {
+							delete obj
+							console.log('Deleting object', clients)
+						}
+						break
+					}
+					// Kill the connection.
+				}
+				data.timeout -= timeInterval;
+				if (data.timeout === 0) {
+					clearInterval(interval)
+					resolve('Success')
+				}
+				else if (data.timeout < 1000) {
+					timeInterval = data.timeout
+				}
+			}, timeInterval)
 		});
 
 		promise.then(function(result) {
-			console.log('Timeout occured', data.connId)
+			console.log('Interval over', data.connId)
+			console.log('After processing', clients)
 			socket.emit('response', {status: "ok", connId: data.connId})	
 		}, function(err) {
-			console.log('Timeout cancel')
+			console.log('Interval cancel')
 		})
-
-		console.log('Got Data')
-		clients.push(data)
-		console.log(clients)
 	})
 
 	socket.on('disconnect', function() {
