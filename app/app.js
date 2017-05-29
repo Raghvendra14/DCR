@@ -23,11 +23,19 @@ io.on('connection', function(socket) {
 	console.log('Client Connected', socket.id)
 
 	socket.on('request', function(data) {
-		setTimeout(function() {
+		var promise = new Promise(function (resolve, reject) { 
+			setTimeout(function() {
+				resolve('Success')
+			}, data.timeout)	
+		});
+
+		promise.then(function(result) {
 			console.log('Timeout occured', data.connId)
-			console.log('Current Socket id', socket.id)
-			socket.emit('response', {status: "ok"})	
-		}, data.timeout)
+			socket.emit('response', {status: "ok", connId: data.connId})	
+		}, function(err) {
+			console.log('Timeout cancel')
+		})
+
 		console.log('Got Data')
 		clients.push(data)
 		console.log(clients)
