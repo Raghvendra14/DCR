@@ -35,18 +35,18 @@ io.on('connection', function(socket) {
 			var interval = setInterval(function() {
 				console.log('Time Interval:', timeInterval)
 				timeSpent += timeInterval;
-				for (const obj of clients) {
-					if (obj.connId === data.connId) {
-						if (obj.timeout !== timeSpent.toString()) {
-							obj.timeSpent = timeSpent
-							console.log('Updated timeSpent:', obj)
-						} else {
-							delete obj
-							console.log('Deleting object', clients)
+				for (var i = 0; i < clients.length; i++) {
+					if (clients[i].connId === data.connId) {
+						if (clients[i].timeout !== timeSpent.toString()) {
+							clients[i].timeSpent = timeSpent
+							console.log('Updated timeSpent:', clients[i])
+						} else { // To remove the processed connection.
+							clients.splice(i, 1)
+							console.log('Deleting connection data', clients)
 						}
 						break
 					}
-					// Kill the connection.
+					
 				}
 				data.timeout -= timeInterval;
 				if (data.timeout === 0) {
