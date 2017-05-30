@@ -12,7 +12,6 @@ angular.module('DCRApp', []).controller('DCRForm', ['$scope', function ($scope) 
 		$scope.insertResponse = ''
 		$scope.insertStatus = ''
 		$scope.insertKillStatus = ''
-		console.log('Sending request with', data)
 		socket.emit('request', data)
 	}
 
@@ -36,7 +35,6 @@ angular.module('DCRApp', []).controller('DCRForm', ['$scope', function ($scope) 
 
 	// Socket functions
 	socket.on('response', function(data) {
-		console.log(data)
 		var result = ''
 		if (angular.equals(data.status, "ok")) {
 			result = 'Result: {"status": "ok", "connId": ' + data.connId + '}'
@@ -53,7 +51,6 @@ angular.module('DCRApp', []).controller('DCRForm', ['$scope', function ($scope) 
 		if (angular.equals(data.result, '')) {
 			status = 'No current connections found.'
 		} else {
-			console.log(data)
 			status = 'Result: {' + data.result + '}'
 		}
 		$scope.$apply(function() {
@@ -62,7 +59,6 @@ angular.module('DCRApp', []).controller('DCRForm', ['$scope', function ($scope) 
 	})
 
 	socket.on('killed', function(data) {
-		console.log(data)
 		var result = ''
 		if (angular.equals(data.status, "ok")) {
 			result = 'Result: {"status":"ok", "connId": ' + data.connId + '}'
